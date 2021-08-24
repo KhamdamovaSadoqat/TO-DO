@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">TO DO</string>
+    <string name="title_home">Home</string>
+    <string name="title_task">Task</string>
+    <string name="title_calendar">Calendar</string>
+    <string name="task_name">Task name</string>
+    <string name="meeting">Meeting</string>
+    <string name="discription">Discription</string>
+    <string name="morning_run">Morning run</string>
+    <string name="select_a_category">Select a category</string>
+    <string name="category">Category</string>
+    <string name="date">Date</string>
+    <string name="time">Time</string>
+    <string name="important">Important</string>
+    <string name="reminde">Reminde</string>
+    <string name="confirm">Confirm</string>
+
+    <string-array name="category">
+        <item>Home</item>
+        <item>Work</item>
+        <item>Personal</item>
+    </string-array>
+
+</resources>
