@@ -41,7 +41,7 @@ class AddFragment : Fragment() {
 
     var taskName: String? = null
     var discription: String? = null
-    var category: String? = null
+    var category: String? = "Home"
     var date: String? = null
     var time: String? = null
     var important: Boolean = false
