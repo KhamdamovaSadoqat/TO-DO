@@ -14,6 +14,9 @@
     <string name="important">Important</string>
     <string name="reminde">Reminde</string>
     <string name="confirm">Confirm</string>
+    <string name="ok">OK</string>
+    <string name="input_discription">Discription is required!</string>
+    <string name="input_task_name">Task name is required!</string>
 
     <string-array name="category">
         <item>Home</item>
