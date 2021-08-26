@@ -12,6 +12,7 @@
     <color name="midnight_blue_900">#142453</color>
     <color name="midnight_blue_900_2">#242A7A</color>
     <color name="black_russian_900">#181A20</color>
+    <color name="black_russian_900_2">#1F212B</color>
     <color name="midnight_express_900">#252843</color>
     <color name="midnight_express_900_2">#181D2F</color>
     <color name="cornflower_blue_400">#779FF2</color>
@@ -27,5 +28,12 @@
     <color name="grey_suit_500">#96979C</color>
     <color name="transparent">#00FFFFFF</color>
     <color name="black_rock_900">#252834</color>
+
+    <color name="catalina_blue_800">#253A55</color>
+    <color name="lochmara_800">#29659D</color>
+    <color name="kaitok_green_900">#214A3B</color>
+    <color name="sea_green_700">#27884E</color>
+    <color name="cab_sav_800">#4C2E32</color>
+    <color name="medium_carmine_800">#AE4633</color>
 
 </resources>

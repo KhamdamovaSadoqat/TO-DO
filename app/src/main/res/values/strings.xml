@@ -17,6 +17,11 @@
     <string name="ok">OK</string>
     <string name="input_discription">Discription is required!</string>
     <string name="input_task_name">Task name is required!</string>
+    <string name="work">WORK</string>
+    <string name="home">HOME</string>
+    <string name="personal">PERSONAL</string>
+    <string name="custom_time">00:00</string>
+    <string name="custom_text">Hakuna Matata</string>
 
     <string-array name="category">
         <item>Home</item>
