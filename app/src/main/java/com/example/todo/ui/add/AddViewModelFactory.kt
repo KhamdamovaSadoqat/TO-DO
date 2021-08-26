@@ -13,7 +13,7 @@ class AddViewModelFactory(private val dataSource: ToDoDao): ViewModelProvider.Fa
         if (modelClass.isAssignableFrom(AddViewModel::class.java)){
             return AddViewModel(dataSource) as T
         } else {
-            throw IllegalArgumentException("AddViewModel not found ${modelClass.isAssignableFrom(AddViewModel::class.java)}")
+            throw IllegalArgumentException("AddViewModel not found")
         }
     }
 }

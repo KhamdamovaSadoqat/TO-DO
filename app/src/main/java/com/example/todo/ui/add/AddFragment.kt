@@ -32,7 +32,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-
 class AddFragment : Fragment() {
 
 
@@ -175,7 +174,10 @@ class AddFragment : Fragment() {
         }
 
         //confirm
-        binding.btnConfirm.setOnClickListener { confirm() }
+        binding.btnConfirm.setOnClickListener {
+            if(binding.btnDate.text != "Date") date = binding.btnDate.text.toString()
+            if(binding.btnTime.text != "Time") time = binding.btnTime.text.toString()
+            confirm() }
     }
 
     fun confirm() {
@@ -185,14 +187,14 @@ class AddFragment : Fragment() {
                     binding.etTaskName.text.toString(),
                     binding.etDiscription.text.toString(),
                     category,
-                    binding.btnDate.text.toString(),
-                    binding.btnTime.text.toString(),
+                    date,
+                    time,
                     important,
                     reminde
                 )
                 addViewModel.insertToDo(todo)
                 findNavController().navigate(R.id.navigation_task)
-            }
-        }
+            }else binding.etDiscription.error = getString(R.string.input_discription)
+        } else binding.etTaskName.error = getString(R.string.input_task_name)
     }
 }
