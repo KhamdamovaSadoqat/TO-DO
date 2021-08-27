@@ -1,6 +1,7 @@
 package com.example.todo.ui.task
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,13 +11,16 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todo.R
 import com.example.todo.data.model.ToDo
 import com.example.todo.data.repository.ToDoRepository
 import com.example.todo.data.room.MyRoomDatabase
+import com.example.todo.data.room.ToDoDao
 import com.example.todo.databinding.FragmentTaskBinding
+import kotlinx.coroutines.DelicateCoroutinesApi
 
 class TaskFragment : Fragment() {
 
@@ -28,6 +32,7 @@ class TaskFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
+    @DelicateCoroutinesApi
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -41,13 +46,14 @@ class TaskFragment : Fragment() {
         _binding = FragmentTaskBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        loadView()
+        loadView(dataSource.dao)
 
         return root
     }
 
-    fun loadView(){
-        setRv()
+    @DelicateCoroutinesApi
+    fun loadView(dataSource: ToDoDao){
+        setRv(dataSource)
         binding.fabAdd.setOnClickListener {
             findNavController().navigate(R.id.action_navigation_task_to_addFragment)
         }
@@ -56,10 +62,24 @@ class TaskFragment : Fragment() {
         }
     }
 
-    fun setRv(){
+    @DelicateCoroutinesApi
+    fun setRv(dataSource: ToDoDao){
         adapter = TaskAdapter {  }
         binding.rvTodo.adapter = adapter
         binding.rvTodo.layoutManager = LinearLayoutManager(requireContext())
+
+        val swipeHandler = object : SwipeToDeleteCallback(requireContext(), dataSource){
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                super.onSwiped(viewHolder, direction)
+                val adapter = binding.rvTodo.adapter as TaskAdapter
+                val id = adapter.removeAt(viewHolder.adapterPosition)
+                Log.d("-------------", "onSwiped: id: $id")
+                super.getTodo(id)
+            }
+        }
+
+        val itemTouchHelper = ItemTouchHelper(swipeHandler)
+        itemTouchHelper.attachToRecyclerView(binding.rvTodo)
     }
 
     override fun onDestroyView() {

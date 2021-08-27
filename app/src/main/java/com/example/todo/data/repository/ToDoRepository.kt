@@ -10,7 +10,7 @@ class ToDoRepository(private val dataSource: ToDoDao) {
         dataSource.insertToDo(todo)
     }
 
-    suspend fun deleteTodo(id: Int) {
+    fun deleteTodo(id: Int) {
         dataSource.deleteToDo(id)
     }
 

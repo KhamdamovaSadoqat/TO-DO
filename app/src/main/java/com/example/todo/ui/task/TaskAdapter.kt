@@ -13,10 +13,18 @@ class TaskAdapter(private val itemClickListener: ((ToDo) -> Unit)) :
     RecyclerView.Adapter<TaskAdapter.VH>() {
 
     private var list = arrayListOf<ToDo>()
+    private var id: Int? = null
 
     fun updateTodo(list: ArrayList<ToDo>) {
         this.list = list
         notifyDataSetChanged()
+    }
+
+    fun removeAt(position: Int): Int{
+        this.id = list[position].id
+        list.removeAt(position)
+        notifyDataSetChanged()
+        return id as Int
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {

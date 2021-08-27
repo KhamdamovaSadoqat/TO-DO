@@ -1,14 +1,9 @@
 package com.example.todo.ui.add
 
 import android.app.AlertDialog
-import android.content.ContentProvider
-import android.content.Context
 import android.content.DialogInterface
-import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
-import android.view.ContextThemeWrapper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,26 +12,21 @@ import android.widget.ArrayAdapter
 import android.widget.DatePicker
 import android.widget.TimePicker
 import androidx.core.content.ContextCompat
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
-import androidx.room.RoomDatabase
 import com.example.todo.R
 import com.example.todo.data.model.ToDo
 import com.example.todo.data.room.MyRoomDatabase
 import com.example.todo.databinding.FragmentAddBinding
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.example.todo.utils.DataTimeUtils
 
 class AddFragment : Fragment() {
 
 
     private lateinit var addViewModel: AddViewModel
     private var _binding: FragmentAddBinding? = null
+    private val dataTimeUtils = DataTimeUtils()
 
     var taskName: String? = null
     var discription: String? = null
@@ -105,11 +95,11 @@ class AddFragment : Fragment() {
             builder.setView(datePicker)
             builder.setNegativeButton("Cancel", null)
             builder.setPositiveButton(
-                R.string.ok,
-                DialogInterface.OnClickListener { dialog, id ->
-                    binding.btnDate.text =
-                        "${datePicker.dayOfMonth}.${datePicker.month}.${datePicker.year}"
-                })
+                R.string.ok
+            ) { _, _ ->
+                binding.btnDate.text =
+                    dataTimeUtils.dateToCompleteDate("${datePicker.dayOfMonth}.${datePicker.month}.${datePicker.year}")
+            }
             builder.show()
         }
 
@@ -121,19 +111,21 @@ class AddFragment : Fragment() {
 
             builder.setView(timePicker)
             builder.setNegativeButton("Cancel", null)
-            builder.setPositiveButton(R.string.ok, DialogInterface.OnClickListener { dialog, id ->
+            builder.setPositiveButton(R.string.ok) { _, _ ->
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    binding.btnTime.text = "${timePicker.hour}:${timePicker.minute}"
+                    binding.btnTime.text =
+                        dataTimeUtils.timeToCompleteTime("${timePicker.hour}:${timePicker.minute}")
                 } else {
-                    binding.btnTime.text = "${timePicker.currentHour}:${timePicker.currentHour}"
+                    binding.btnTime.text =
+                        dataTimeUtils.timeToCompleteTime("${timePicker.currentHour}:${timePicker.currentHour}")
                 }
-            })
+            }
             builder.show()
         }
 
         //important
         binding.tvImportant.setOnClickListener {
-            if(important){
+            if (important) {
                 binding.tvImportant.setCompoundDrawablesRelativeWithIntrinsicBounds(
                     ContextCompat.getDrawable(
                         requireContext(),
@@ -141,7 +133,7 @@ class AddFragment : Fragment() {
                     ), null, null, null
                 )
                 important = false
-            } else{
+            } else {
                 binding.tvImportant.setCompoundDrawablesRelativeWithIntrinsicBounds(
                     ContextCompat.getDrawable(
                         requireContext(),
@@ -154,7 +146,7 @@ class AddFragment : Fragment() {
 
         //reminde
         binding.tvReminde.setOnClickListener {
-            if(reminde){
+            if (reminde) {
                 binding.tvReminde.setCompoundDrawablesRelativeWithIntrinsicBounds(
                     ContextCompat.getDrawable(
                         requireContext(),
@@ -162,7 +154,7 @@ class AddFragment : Fragment() {
                     ), null, null, null
                 )
                 reminde = false
-            } else{
+            } else {
                 binding.tvReminde.setCompoundDrawablesRelativeWithIntrinsicBounds(
                     ContextCompat.getDrawable(
                         requireContext(),
@@ -175,9 +167,12 @@ class AddFragment : Fragment() {
 
         //confirm
         binding.btnConfirm.setOnClickListener {
-            if(binding.btnDate.text != "Date") date = binding.btnDate.text.toString()
-            if(binding.btnTime.text != "Time") time = binding.btnTime.text.toString()
-            confirm() }
+            if (binding.btnDate.text != "Date") date =
+                dataTimeUtils.dateToCompleteDate(binding.btnDate.text.toString())
+            if (binding.btnTime.text != "Time") time =
+                dataTimeUtils.timeToCompleteTime(binding.btnTime.text.toString())
+            confirm()
+        }
     }
 
     fun confirm() {
@@ -194,7 +189,7 @@ class AddFragment : Fragment() {
                 )
                 addViewModel.insertToDo(todo)
                 findNavController().navigate(R.id.navigation_task)
-            }else binding.etDiscription.error = getString(R.string.input_discription)
+            } else binding.etDiscription.error = getString(R.string.input_discription)
         } else binding.etTaskName.error = getString(R.string.input_task_name)
     }
 }
