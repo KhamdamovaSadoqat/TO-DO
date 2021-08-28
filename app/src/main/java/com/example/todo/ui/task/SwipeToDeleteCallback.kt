@@ -4,20 +4,13 @@ import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.ColorDrawable
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todo.R
-import com.example.todo.data.model.ToDo
 import com.example.todo.data.repository.ToDoRepository
 import com.example.todo.data.room.ToDoDao
-import com.example.todo.databinding.ItemTodoBinding
 import kotlinx.coroutines.*
-import kotlin.coroutines.CoroutineContext
 
 open class SwipeToDeleteCallback(context: Context, dataSource: ToDoDao) :
     ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
