@@ -44,7 +44,7 @@ class TaskAdapter(private val itemClickListener: ((ToDo) -> Unit)) :
         fun onBind(todo: ToDo) {
             binding.apply {
                 tvTask.text = todo.taskName
-                tvTime.text = todo.time
+                tvDate.text = todo.date
 
                 when (todo.category) {
                     "Home" -> {
@@ -83,8 +83,10 @@ class TaskAdapter(private val itemClickListener: ((ToDo) -> Unit)) :
                             R.drawable.bg_task_personal
                         )
                     }
-
                 }
+
+                if(todo.important) fbStar.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_baseline_star_24))
+                else fbStar.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_baseline_star_border_24))
             }
         }
     }
