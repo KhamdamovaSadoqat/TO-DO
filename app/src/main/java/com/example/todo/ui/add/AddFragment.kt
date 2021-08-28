@@ -1,7 +1,6 @@
 package com.example.todo.ui.add
 
 import android.app.AlertDialog
-import android.content.DialogInterface
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -27,6 +26,7 @@ class AddFragment : Fragment() {
     private lateinit var addViewModel: AddViewModel
     private var _binding: FragmentAddBinding? = null
     private val dataTimeUtils = DataTimeUtils()
+    private val notification = com.example.todo.notification.Notification
 
     var taskName: String? = null
     var discription: String? = null
@@ -168,14 +168,14 @@ class AddFragment : Fragment() {
         //confirm
         binding.btnConfirm.setOnClickListener {
             if (binding.btnDate.text != "Date") date =
-                dataTimeUtils.dateToCompleteDate(binding.btnDate.text.toString())
+                binding.btnDate.text.toString()
             if (binding.btnTime.text != "Time") time =
                 dataTimeUtils.timeToCompleteTime(binding.btnTime.text.toString())
             confirm()
         }
     }
 
-    fun confirm() {
+    private fun confirm() {
         if (!binding.etTaskName.text.isNullOrEmpty()) {
             if (!binding.etDiscription.text.isNullOrEmpty()) {
                 val todo = ToDo(
@@ -188,6 +188,10 @@ class AddFragment : Fragment() {
                     reminde
                 )
                 addViewModel.insertToDo(todo)
+                if(reminde) {
+                    notification.setTime(date, time)
+                    notification.setNotification(requireContext())
+                }
                 findNavController().navigate(R.id.navigation_task)
             } else binding.etDiscription.error = getString(R.string.input_discription)
         } else binding.etTaskName.error = getString(R.string.input_task_name)
