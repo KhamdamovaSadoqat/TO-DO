@@ -26,7 +26,6 @@ class DataTimeUtils {
     fun timeToLong(date: String?, time: String?): Long {
         if (date.isNullOrEmpty() || time.isNullOrEmpty()) return 0
 
-        Log.d("-------------", "timeToLong: time: $time, date: $date")
         val calendar = mCalendar
         val newDate = date.split(".")
         val newTime = time.split(":")
@@ -39,8 +38,13 @@ class DataTimeUtils {
             newTime[1].toInt(),
             0
         )
-
         return calendar.timeInMillis
+    }
+
+    fun dateWithoutYear(date: String?): String?{
+        if(date.isNullOrEmpty()) return null
+        val newDate = date.split(".")
+        return "${newDate[0]}.${newDate[1]}"
     }
 
 }

@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.todo.R
 import com.example.todo.data.model.ToDo
 import com.example.todo.databinding.ItemTodoBinding
+import com.example.todo.utils.DataTimeUtils
 
 class TaskAdapter(private val itemClickListener: ((ToDo) -> Unit)) :
     RecyclerView.Adapter<TaskAdapter.VH>() {
@@ -41,10 +42,11 @@ class TaskAdapter(private val itemClickListener: ((ToDo) -> Unit)) :
     override fun getItemCount() = list.size
     class VH(private val binding: ItemTodoBinding, private val context: Context) :
         RecyclerView.ViewHolder(binding.root) {
+        val util = DataTimeUtils()
         fun onBind(todo: ToDo) {
             binding.apply {
                 tvTask.text = todo.taskName
-                tvDate.text = todo.date
+                tvDate.text = util.dateWithoutYear(todo.date)
 
                 when (todo.category) {
                     "Home" -> {
