@@ -17,6 +17,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import com.example.todo.MainActivity
 import com.example.todo.R
+import com.example.todo.data.model.ToDo
 import com.example.todo.utils.DataTimeUtils
 import java.lang.IllegalStateException
 
@@ -25,6 +26,10 @@ const val CHANNEL_NAME = "todo"
 
 const val BUNDLE_EXTRA = "bundle_extra"
 const val ALARM_KEY = "alarm_key"
+const val TASK_NAME = "task_name"
+const val DISCRIPTION = "discription"
+const val CATEGORY = "category"
+const val IMPORTANCE = "importance"
 
 const val NOTIFICATION_ID = 1000
 
@@ -37,24 +42,29 @@ class Notification : BroadcastReceiver() {
         val builder = NotificationCompat.Builder(context, CHANNEL_ID)
         createNotificationChannel(context)
 
+
         var mBitmap: Bitmap? = ContextCompat.getDrawable(
             context,
             R.mipmap.ic_launcher
         )?.toBitmap()
+        val bundle: Bundle? = intent?.getBundleExtra(BUNDLE_EXTRA)
+
 
         builder.setSmallIcon(R.mipmap.ic_launcher)
         builder.setLargeIcon(mBitmap)
         builder.setShowWhen(true)
         builder.color = ContextCompat.getColor(context, R.color.white)
-        builder.setContentTitle("Time to do some jooob")
+        builder.setContentTitle(bundle?.getString(TASK_NAME))
+        builder.setContentText(bundle?.getString(DISCRIPTION))
         builder.setChannelId(CHANNEL_ID)
         builder.setVibrate(longArrayOf(1000, 500, 1000, 500, 1000, 500))
         builder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
         builder.setContentIntent(launchAlarmLandingPage(context))
         builder.setAutoCancel(true)
-        builder.setContentTitle("Qaysidr ishi vohti boldi lekin bu haqida keyinroq")
-        mBitmap = ContextCompat.getDrawable(context, R.drawable.ic_baseline_star_border_24)?.toBitmap()
-        builder.setLargeIcon(mBitmap)
+//        mBitmap = if (intent?.getBooleanExtra(IMPORTANCE, false) == true)
+//            ContextCompat.getDrawable(context, R.drawable.ic_baseline_star_24)?.toBitmap()
+//        else ContextCompat.getDrawable(context, R.drawable.ic_baseline_star_border_24)?.toBitmap()
+//        builder.setLargeIcon(mBitmap)
         manager.notify(NOTIFICATION_ID, builder.build())
 
     }
@@ -95,31 +105,35 @@ class Notification : BroadcastReceiver() {
         return i
     }
 
-    companion object{
+    companion object {
         private val dateTimeUtils = DataTimeUtils()
-        private var time: String? = ""
-        private var date: String? = ""
+        private var todo: ToDo? = null
+        private var notificationId = 0
 
-        fun setNotification(context: Context){
+        fun setNotification(context: Context) {
             setRemainderNotification(context)
         }
 
-        fun setTime(date: String?, time: String?){
-            this.time = time
-            this.date = date
+        fun setData(todo: ToDo, notificationId: Int) {
+            this.todo = todo
+            this.notificationId = notificationId
         }
 
-        private fun setRemainderNotification(context: Context){
+        private fun setRemainderNotification(context: Context) {
 
-            val time: Long = dateTimeUtils.timeToLong(date, time)
+            val time: Long = dateTimeUtils.timeToLong(todo?.date, todo?.time)
 
             val intent = Intent(context, Notification::class.java)
             val bundle = Bundle()
             bundle.putLong(ALARM_KEY, time)
+            bundle.putString(TASK_NAME, todo?.taskName)
+            bundle.putString(DISCRIPTION, todo?.discription)
+            bundle.putString(CATEGORY, todo?.category)
+            bundle.putBoolean(IMPORTANCE, todo!!.important)
             intent.putExtra(BUNDLE_EXTRA, bundle)
             val pendingIntent = PendingIntent.getBroadcast(
                 context,
-                NOTIFICATION_ID,
+                notificationId,
                 intent,
                 PendingIntent.FLAG_UPDATE_CURRENT
             )
@@ -127,7 +141,6 @@ class Notification : BroadcastReceiver() {
             ScheduleNotification.with(context).schedule(time, pendingIntent)
 
 //            Log.d("-------------", "setRemainderAlarm: ")
-//
 //            val currentTime = System.currentTimeMillis()+2000
 //            Log.d("-------------", "setRemainderAlarm: current : $currentTime")
 //            ScheduleNotification.with(context).schedule(currentTime, pendingIntent)
@@ -136,18 +149,18 @@ class Notification : BroadcastReceiver() {
 
     private class ScheduleNotification private constructor(
         private val am: AlarmManager
-    ){
-        fun schedule(time: Long, pi: PendingIntent?){
+    ) {
+        fun schedule(time: Long, pi: PendingIntent?) {
             Log.d("--------", "schedule: working")
 //            Log.d("--------", "schedule: time: $time")
-            am.setExact(AlarmManager.RTC, time, pi)
+            am.setExact(AlarmManager.RTC_WAKEUP, time, pi)
         }
 
-        companion object{
-            fun with(context: Context): ScheduleNotification{
+        companion object {
+            fun with(context: Context): ScheduleNotification {
                 val am = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager?
                     ?: throw  IllegalStateException("alarm manager not found")
-                return  ScheduleNotification(am)
+                return ScheduleNotification(am)
             }
         }
     }

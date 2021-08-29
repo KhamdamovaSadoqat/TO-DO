@@ -19,6 +19,7 @@ import com.example.todo.data.model.ToDo
 import com.example.todo.data.room.MyRoomDatabase
 import com.example.todo.databinding.FragmentAddBinding
 import com.example.todo.utils.DataTimeUtils
+import java.util.*
 
 class AddFragment : Fragment() {
 
@@ -188,8 +189,9 @@ class AddFragment : Fragment() {
                     reminde
                 )
                 addViewModel.insertToDo(todo)
+                val notificationId = Random().nextInt(Int.MAX_VALUE)
                 if(reminde) {
-                    notification.setTime(date, time)
+                    notification.setData(todo, notificationId)
                     notification.setNotification(requireContext())
                 }
                 findNavController().navigate(R.id.navigation_task)
