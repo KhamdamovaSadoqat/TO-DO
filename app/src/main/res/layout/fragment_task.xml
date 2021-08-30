@@ -7,6 +7,15 @@
     android:background="@color/black_russian_900"
     tools:context=".ui.task.TaskFragment">
 
+    <TextView
+        android:id="@+id/tv_add_some_item"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="@string/add_some_todo"
+        android:textColor="@color/ghost_300"
+        android:textSize="18sp"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_todo"
         android:layout_width="match_parent"

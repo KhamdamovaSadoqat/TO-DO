@@ -32,9 +32,6 @@ class TaskFragment : Fragment() {
     private lateinit var adapter: TaskAdapter
     private lateinit var dialogBinding: DialogDetailsBinding
     private var dialog: AlertDialog? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
     @DelicateCoroutinesApi
@@ -63,6 +60,8 @@ class TaskFragment : Fragment() {
             findNavController().navigate(R.id.action_navigation_task_to_addFragment)
         }
         taskViewModel.getTodo()?.observe(viewLifecycleOwner) { todo ->
+            if(!todo.isNullOrEmpty()) binding.tvAddSomeItem.visibility = View.GONE
+            else binding.tvAddSomeItem.visibility = View.VISIBLE
             adapter.updateTodo(todo as ArrayList<ToDo>)
         }
     }

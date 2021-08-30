@@ -22,6 +22,7 @@
     <string name="personal">PERSONAL</string>
     <string name="custom_time">00:00</string>
     <string name="custom_text">Hakuna Matata</string>
+    <string name="add_some_todo">Add some todo</string>
 
     <string-array name="category">
         <item>Home</item>

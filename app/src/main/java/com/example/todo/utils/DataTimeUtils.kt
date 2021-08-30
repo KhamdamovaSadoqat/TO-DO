@@ -1,6 +1,5 @@
 package com.example.todo.utils
 
-import android.util.Log
 import java.util.*
 
 class DataTimeUtils {
